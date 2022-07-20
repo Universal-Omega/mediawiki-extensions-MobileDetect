@@ -12,5 +12,5 @@ if ( function_exists( 'wfLoadExtension' ) ) {
 
 	return;
 } else {
-	die( 'This version of the MobileDetect extension requires MediaWiki 1.29+' );
+	die( 'This version of the MobileDetect extension requires MediaWiki 1.35+' );
 }

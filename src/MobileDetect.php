@@ -1,6 +1,8 @@
 <?php
 
-class MobileDetect {
+namespace MediaWiki\Extension\MobileDetect;
+
+class Hooks {
 
 	/**
 	 * @param OutputPage &$output

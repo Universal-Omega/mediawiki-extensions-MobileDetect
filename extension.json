@@ -11,22 +11,22 @@
 	"license-name": "GPL-3.0-only",
 	"type": "parserhook",
 	"requires": {
-		"MediaWiki": ">= 1.29.0"
+		"MediaWiki": ">= 1.35.0"
 	},
 	"MessagesDirs": {
 		"MobileDetect": [
 			"i18n"
 		]
 	},
-	"AutoloadClasses": {
-		"MobileDetect": "src/MobileDetect.php"
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\MobileDetect\\": "src/"
 	},
 	"ResourceModules": {
 		"ext.MobileDetect.mobileonly": {
-			"styles": "MobileDetect.mobileonly.css"
+			"styles": "modules/mobileonly.css"
 		},
 		"ext.MobileDetect.nomobile": {
-			"styles": "MobileDetect.nomobile.css"
+			"styles": "modules/nomobile.css"
 		}
 	},
 	"ResourceFileModulePaths": {
@@ -34,8 +34,9 @@
 		"remoteExtPath": "MobileDetect"
 	},
 	"Hooks": {
-		"BeforePageDisplay": "MobileDetect::addModule",
-		"ParserFirstCallInit": "MobileDetect::setParserHook"
+		"BeforePageDisplay": "MediaWiki\\Extension\\MobileDetect\\Hooks::onBeforePageDisplay",
+		"ParserFirstCallInit": "MediaWiki\\Extension\\MobileDetect\\Hooks::onParserFirstCallInit"
 	},
+	"load_composer_autoloader": true,
 	"manifest_version": 2
 }

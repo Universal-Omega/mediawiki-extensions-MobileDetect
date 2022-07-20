@@ -4,5 +4,5 @@
  * Allow to use from LocalSettings.php
  */
 function mobiledetect() {
-	return MobileDetect::isMobile();
+	return MediaWiki\Extension\MobileDetect\Hooks::isMobile();
 }

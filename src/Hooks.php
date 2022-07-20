@@ -2,25 +2,35 @@
 
 namespace MediaWiki\Extension\MobileDetect;
 
-class Hooks {
+use OutputPage;
+use MediaWiki\Hook\BeforePageDisplayHook;
+use MediaWiki\Hook\ParserFirstCallInitHook;
+use Parser;
+use PPFrame;
+use Skin;
 
+class Hooks implements
+	BeforePageDisplayHook,
+	ParserFirstCallInitHook
+{
 	/**
-	 * @param OutputPage &$output
+	 * @param OutputPage $out
+	 * @param Skin $skin
 	 */
-	public static function addModule( &$output ) {
+	public function onBeforePageDisplay( $out, $skin ) {
 		if ( self::isMobile() ) {
-			$output->addModuleStyles( 'ext.MobileDetect.mobileonly' );
+			$out->addModuleStyles( 'ext.MobileDetect.mobileonly' );
 		} else {
-			$output->addModuleStyles( 'ext.MobileDetect.nomobile' );
+			$out->addModuleStyles( 'ext.MobileDetect.nomobile' );
 		}
 	}
 
 	/**
-	 * @param Parser &$parser
+	 * @param Parser $parser
 	 */
-	public static function setParserHook( &$parser ) {
-		$parser->setHook( 'mobileonly', 'MobileDetect::mobileonly' );
-		$parser->setHook( 'nomobile', 'MobileDetect::nomobile' );
+	public function onParserFirstCallInit( $parser ) {
+		$parser->setHook( 'mobileonly', [ __CLASS__, 'mobileonly' ] );
+		$parser->setHook( 'nomobile', [ __CLASS__, 'nomobile' ] );
 	}
 
 	/**

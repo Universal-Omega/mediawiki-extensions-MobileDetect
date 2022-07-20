@@ -33,9 +33,18 @@
 		"localBasePath": "",
 		"remoteExtPath": "MobileDetect"
 	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\MobileDetect\\Hooks"
+		}
+	},
 	"Hooks": {
-		"BeforePageDisplay": "MediaWiki\\Extension\\MobileDetect\\Hooks::onBeforePageDisplay",
-		"ParserFirstCallInit": "MediaWiki\\Extension\\MobileDetect\\Hooks::onParserFirstCallInit"
+		"BeforePageDisplay": {
+			"handler": "main"
+		},
+		"ParserFirstCallInit": {
+			"handler": "main"
+		}
 	},
 	"load_composer_autoloader": true,
 	"manifest_version": 2

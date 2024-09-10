@@ -1,28 +1,63 @@
 <?php
 
-class MobileDetect {
+namespace MediaWiki\Extension\MobileDetect;
 
-	public static function addModule( &$output ) {
-		if ( MobileDetect::isMobile() ) {
-			$output->addModuleStyles( 'ext.MobileDetect.mobileonly' );
+use OutputPage;
+use MediaWiki\Hook\BeforePageDisplayHook;
+use MediaWiki\Hook\ParserFirstCallInitHook;
+use Parser;
+use PPFrame;
+use Skin;
+
+class Hooks implements
+	BeforePageDisplayHook,
+	ParserFirstCallInitHook
+{
+	/**
+	 * @param OutputPage $out
+	 * @param Skin $skin
+	 */
+	public function onBeforePageDisplay( $out, $skin ) {
+		if ( self::isMobile() ) {
+			$out->addModuleStyles( 'ext.MobileDetect.mobileonly' );
 		} else {
-			$output->addModuleStyles( 'ext.MobileDetect.nomobile' );
+			$out->addModuleStyles( 'ext.MobileDetect.nomobile' );
 		}
 	}
 
-	public static function setParserHook( &$parser ) {
-		$parser->setHook( 'mobileonly', 'MobileDetect::mobileonly' );
-		$parser->setHook( 'nomobile', 'MobileDetect::nomobile' );
+	/**
+	 * @param Parser $parser
+	 */
+	public function onParserFirstCallInit( $parser ) {
+		$parser->setHook( 'mobileonly', [ __CLASS__, 'mobileonly' ] );
+		$parser->setHook( 'nomobile', [ __CLASS__, 'nomobile' ] );
 	}
 
+	/**
+	 * @param string $input
+	 * @param array $args
+	 * @param Parser $parser
+	 * @param PPFrame $frame
+	 * @return string
+	 */
 	public static function nomobile( $input, array $args, Parser $parser, PPFrame $frame ) {
 		return '<div class="nomobile">' . $parser->recursiveTagParse( $input ) . '</div>';
 	}
 
+	/**
+	 * @param string $input
+	 * @param array $args
+	 * @param Parser $parser
+	 * @param PPFrame $frame
+	 * @return string
+	 */
 	public static function mobileonly( $input, array $args, Parser $parser, PPFrame $frame ) {
 		return '<div class="mobileonly">' . $parser->recursiveTagParse( $input ) . '</div>';
 	}
 
+	/**
+	 * @return bool
+	 */
 	public static function isMobile() {
 		$user_agent = array_key_exists( 'HTTP_USER_AGENT', $_SERVER ) ? $_SERVER['HTTP_USER_AGENT'] : '';
 		$http_accept = array_key_exists( 'HTTP_ACCEPT', $_SERVER ) ? $_SERVER['HTTP_ACCEPT'] : '';
